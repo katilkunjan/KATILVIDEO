@@ -175,7 +175,7 @@ async def vplay(c: Client, m: Message):
         else:
             if len(m.command) < 2:
                 await m.reply(
-                    "**ARE YAAR KUSH TO VIDEO NAME YA LINK SEND KRO SIRF /VPLAY LIKH DIYE HD HAI YAAR DIMAG LGAYA KRO**"
+                    "**ARE YAAR KUSH TO VIDEO NAME YA LINK SEND KRO SIRF CMND LIKH DIYE.HD HAI YAAR DIMAG LGAYA KRO THODA.**"
                 )
             else:
                 loser = await c.send_message(chat_id, "🔍 **DHUNDH RHA HU SABR KRO THORA**")
@@ -239,7 +239,7 @@ async def vplay(c: Client, m: Message):
     else:
         if len(m.command) < 2:
             await m.reply(
-                "» reply to an **video file** or **give something to search.**"
+                "ARE YAAR KUSH TO VIDEO NAME YA LINK SEND KRO SIRF CMND LIKH DIYE.HD HAI YAAR DIMAG LGAYA KRO THODA.**"
             )
         else:
             loser = await c.send_message(chat_id, "🔍 **DHUNDH RHA HU SABR KRO THORA**")
