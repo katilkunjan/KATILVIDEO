@@ -152,7 +152,7 @@ async def play(c: Client, m: Message):
                     "🔎 **𝐅𝐢𝐧𝐝𝐢𝐧𝐠 💫 𝐓𝐡𝐞 𝐒𝐨𝐧𝐠 ❤️ ꧁༺亗『𝐊𝐀𝐓𝐈𝐋』亗༻꧂...**"
                 )
             else:
-                suhu = await c.send_message(chat_id, "🔍 **SEARCHING...YOUR SONG.**")
+                suhu = await c.send_message(chat_id, "🔎 **𝐅𝐢𝐧𝐝𝐢𝐧𝐠 💫 𝐓𝐡𝐞 𝐒𝐨𝐧𝐠 ❤️ ❰ 亗『𝐊𝐀𝐓𝐈𝐋』亗 MUSIC ❱...**")
                 query = m.text.split(None, 1)[1]
                 search = ytsearch(query)
                 if search == 0:
@@ -213,7 +213,7 @@ async def play(c: Client, m: Message):
                 "✌️𝐖𝐡𝐚𝐭'𝐒 𝐓𝐡𝐞 ❤️ 𝐒𝐨𝐧𝐠 🎸 𝐘𝐨𝐮 🎧 𝐖𝐚𝐧𝐭 𝐓𝐨 𝐏𝐥𝐚𝐲 ▶️ ❤️**"
             )
         else:
-            suhu = await c.send_message(chat_id, "🔍 **SEARCHING...YOUR SONG.**")
+            suhu = await c.send_message(chat_id, "🔎 **𝐅𝐢𝐧𝐝𝐢𝐧𝐠 💫 𝐓𝐡𝐞 𝐒𝐨𝐧𝐠 ❤️ ❰ 亗『𝐊𝐀𝐓𝐈𝐋』亗 MUSIC ❱...****")
             query = m.text.split(None, 1)[1]
             search = ytsearch(query)
             if search == 0:
