@@ -9,7 +9,7 @@ load_dotenv()
 admins = {}
 SESSION_NAME = getenv("SESSION_NAME", "session")
 BOT_TOKEN = getenv("BOT_TOKEN")
-BOT_NAME = getenv("BOT_NAME", "Video Stream")
+BOT_NAME = getenv("BOT_NAME", "KATIL MUSIC")
 API_ID = int(getenv("API_ID"))
 API_HASH = getenv("API_HASH")
 OWNER_NAME = getenv("OWNER_NAME", "༒★[•亗『𝐊𝐀𝐓𝐈𝐋』亗•]★")
