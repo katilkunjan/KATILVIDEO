@@ -78,7 +78,7 @@ KATIL""",
                 ],
                 [
                     InlineKeyboardButton(
-                        "🌐 Source Code", url="https://github.com/CandyMusic/AlexaVideoPlayer"
+                        "👤 Assistant", url="https://t.me/KATIL_ASSISTANT"
                     )
                 ],
             ]
