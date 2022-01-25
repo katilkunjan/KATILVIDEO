@@ -175,16 +175,16 @@ async def vplay(c: Client, m: Message):
         else:
             if len(m.command) < 2:
                 await m.reply(
-                    "» reply to an **video file** or **give something to search.**"
+                    "**ARE YAAR KUSH TO VIDEO NAME YA LINK SEND KRO SIRF /VPLAY LIKH DIYE HD HAI YAAR DIMAG LGAYA KRO**"
                 )
             else:
-                loser = await c.send_message(chat_id, "🔍 **Searching...**")
+                loser = await c.send_message(chat_id, "🔍 **DHUNDH RHA HU SABR KRO THORA**")
                 query = m.text.split(None, 1)[1]
                 search = ytsearch(query)
                 Q = 720
                 amaze = HighQualityVideo()
                 if search == 0:
-                    await loser.edit("❌ **no results found.**")
+                    await loser.edit("❌ **KUSH NHI MILA**")
                 else:
                     songname = search[0]
                     title = search[0]
@@ -242,13 +242,13 @@ async def vplay(c: Client, m: Message):
                 "» reply to an **video file** or **give something to search.**"
             )
         else:
-            loser = await c.send_message(chat_id, "🔍 **Searching...**")
+            loser = await c.send_message(chat_id, "🔍 **DHUNDH RHA HU SABR KRO THORA**")
             query = m.text.split(None, 1)[1]
             search = ytsearch(query)
             Q = 720
             amaze = HighQualityVideo()
             if search == 0:
-                await loser.edit("❌ **no results found.**")
+                await loser.edit("❌ **KUSH NHI MILA**")
             else:
                 songname = search[0]
                 title = search[0]
