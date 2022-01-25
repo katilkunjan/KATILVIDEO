@@ -64,7 +64,7 @@ async def update_repo(_, message: Message):
         system("git pull -f && pip3 install --no-cache-dir -r requirements.txt")
         execle(sys.executable, sys.executable, "main.py", environ)
         return
-    await msg.edit("bot is **up-to-date** with [main](https://t.me/FULL_MASTI_CLUBS disable_web_page_preview=True)
+    await msg.edit("bot is **up-to-date** with [main](https://t.me/FULL_MASTI_CLUBS)", disable_web_page_preview=True)
 
 
 @Client.on_message(command(["restart", f"restart@{BOT_USERNAME}"]) & ~filters.edited)
