@@ -149,7 +149,7 @@ async def play(c: Client, m: Message):
         else:
             if len(m.command) < 2:
                 await m.reply(
-                    "🔎 **𝐅𝐢𝐧𝐝𝐢𝐧𝐠 💫 𝐓𝐡𝐞 𝐒𝐨𝐧𝐠 ❤️ ꧁༺亗『𝐊𝐀𝐓𝐈𝐋』亗༻꧂...**"
+                    "🔎 **𝐅𝐢𝐧𝐝𝐢𝐧𝐠 💫 𝐓𝐡𝐞 𝐒𝐨𝐧𝐠 ❤️ ❰ 亗『𝐊𝐀𝐓𝐈𝐋』亗 MUSIC ❱...**"
                 )
             else:
                 suhu = await c.send_message(chat_id, "🔎 **𝐅𝐢𝐧𝐝𝐢𝐧𝐠 💫 𝐓𝐡𝐞 𝐒𝐨𝐧𝐠 ❤️ ❰ 亗『𝐊𝐀𝐓𝐈𝐋』亗 MUSIC ❱...**")
@@ -186,7 +186,7 @@ async def play(c: Client, m: Message):
                             )
                         else:
                             try:
-                                await suhu.edit("🔄 **JOINING VC...**")
+                                await suhu.edit("**🎵 亗『𝐊𝐀𝐓𝐈𝐋』亗 𝐌𝐮𝐬𝐢𝐜 🔊 𝐑𝐞𝐚𝐝𝐲 𝐅𝐨𝐫 𝐟𝐮𝐜𝐤 👅 𝐕𝐨𝐢𝐜𝐞 𝐂𝐡𝐚𝐭 🥀...**")
                                 await call_py.join_group_call(
                                     chat_id,
                                     AudioPiped(
@@ -245,7 +245,7 @@ async def play(c: Client, m: Message):
                         )
                     else:
                         try:
-                            await suhu.edit("**🎵 亗『𝐊𝐀𝐓𝐈𝐋』亗 𝐌𝐮𝐬𝐢𝐜 🔊 𝐑𝐞𝐚𝐝𝐲 𝐅𝐨𝐫 𝐟𝐮𝐜𝐤 👅 𝐕𝐨𝐢𝐜𝐞 𝐂𝐡𝐚𝐭 🥀**")
+                            await suhu.edit("**🎵 亗『𝐊𝐀𝐓𝐈𝐋』亗 𝐌𝐮𝐬𝐢𝐜 🔊 𝐑𝐞𝐚𝐝𝐲 𝐅𝐨𝐫 𝐟𝐮𝐜𝐤 👅 𝐕𝐨𝐢𝐜𝐞 𝐂𝐡𝐚𝐭 🥀...**")
                             await call_py.join_group_call(
                                 chat_id,
                                 AudioPiped(
