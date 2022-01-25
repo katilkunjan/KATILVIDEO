@@ -49,17 +49,15 @@ async def _human_time_duration(seconds):
 
 
 @Client.on_message(
-    command(["start", f"start@{BOT_USERNAME}"]) & filters.private & ~filters.edited
+    command(["start", f"start@katil_vc_player_bot"]) & filters.private & ~filters.edited
 )
 async def start_(client: Client, message: Message):
     await message.reply_text(
         f"""✨ **Welcome {message.from_user.mention()} !**\n
-💭 [{BOT_NAME}](https://t.me/{BOT_USERNAME}) **Allows you to play music and video on groups through the new Telegram's video chats!**
-
-💡 **Find out all the Bot's commands and how they work by clicking on the » 📚 Commands button!**
-
-🔖 **To know how to use this bot, please click on the » ❓ Basic Guide button!**
-""",
+💭 [❰ 亗『𝐊𝐀𝐓𝐈𝐋』亗 MUSIC ❱](https://t.me/katil_vc_player_bot) **ALLOWS YOU TO PLAY MUSIC AND VIDEO ON GROUPS THROUGH THE NEW TELEGRAM's VOICE CHATS!**
+"""
+        
+        
         reply_markup=InlineKeyboardMarkup(
             [
                 [
@@ -68,11 +66,7 @@ async def start_(client: Client, message: Message):
                         url=f"https://t.me/{BOT_USERNAME}?startgroup=true",
                     )
                 ],
-                [InlineKeyboardButton("❓ Basic Guide", callback_data="cbhowtouse")],
-                [
-                    InlineKeyboardButton("📚 Commands", callback_data="cbcmds"),
-                    InlineKeyboardButton("❤️ Donate", url=f"https://t.me/{OWNER_NAME}"),
-                ],
+                [InlineKeyboardButton("༒★[•亗『𝐊𝐀𝐓𝐈𝐋』亗•]★", url=f"https://t.me/TERA_BAAP_KATIL")],
                 [
                     InlineKeyboardButton(
                         "❖Ƭʜᴇ︻╦╤─🅻🅾️🆅🅴🆁🆂 🅿️🅾️🅸🅽🆃─╤╦︻ヅ", url=f"https://t.me/{GROUP_SUPPORT}"
@@ -153,8 +147,8 @@ async def new_chat(c: Client, m: Message):
                 reply_markup=InlineKeyboardMarkup(
                     [
                         [
-                            InlineKeyboardButton("HEART BROKEN 💔 PERSON", url=f"https://t.me/{UPDATES_CHANNEL}"),
-                            InlineKeyboardButton("❖Ƭʜᴇ︻╦╤─🅻🅾️🆅🅴🆁🆂 🅿️🅾️🅸🅽🆃─╤╦︻ヅ", url=f"https://t.me/{GROUP_SUPPORT}")
+                            InlineKeyboardButton("HEART BROKEN 💔 PERSON", url=f"https://t.me/heartbrokenperson1"),
+                            InlineKeyboardButton("❖Ƭʜᴇ︻╦╤─🅻🅾️🆅🅴🆁🆂 🅿️🅾️🅸🅽🆃─╤╦︻ヅ", url=f"https://t.me/FULL_MASTI_CLUBS")
                         ],
                         [
                             InlineKeyboardButton("👤 Assistant", url=f"https://t.me/{ass_uname}")
