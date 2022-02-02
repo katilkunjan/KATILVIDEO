@@ -1,3 +1,5 @@
+import asyncio
+
 from datetime import datetime
 from sys import version_info
 from time import time
@@ -14,10 +16,12 @@ from config import (
 from program import __version__
 from driver.veez import user
 from driver.filters import command, other_filters
-from pyrogram import Client, filters
-from pyrogram import __version__ as pyrover
+from driver.database.dbchat import add_served_chat, is_served_chat
+from driver.database.dbpunish import is_gbanned_user
+from pyrogram import Client, filters, __version__ as pyrover
+from pyrogram.errors import FloodWait, MessageNotModified
 from pytgcalls import (__version__ as pytover)
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message, ChatJoinRequest
 
 __major__ = 0
 __minor__ = 2
@@ -54,31 +58,33 @@ async def _human_time_duration(seconds):
 async def start_(client: Client, message: Message):
     await message.reply_text(
         f"""✨ **Welcome {message.from_user.mention()} !**\n
-💭 [❰ 亗『𝐊𝐀𝐓𝐈𝐋』亗 MUSIC ❱](https://t.me/katil_vc_player_bot) **ALLOWS YOU TO PLAY MUSIC AND VIDEO ON GROUPS THROUGH THE NEW TELEGRAM's VOICE CHATS!**
+💭 [❰ 亗『𝐊𝐀𝐓𝐈𝐋』亗 MUSIC ❱](https://t.me/katil_vc_player_bot) **Allows you to play music and video on groups through the Telegram Group video chat!**
 
+💡 **Find out all the Bot's commands and how they work by clicking on the » 📚 Commands button!**
 
-KATIL""",
-        
+🔖 **To know how to use this bot, please click on the » ❓ Basic Guide button!**
+""",
         reply_markup=InlineKeyboardMarkup(
             [
                 [
                     InlineKeyboardButton(
-                        "➕ Add me to your Group ➕",
-                        url=f"https://t.me/{BOT_USERNAME}?startgroup=true",
+                        "➕ APNE GROUP ME ADD KRE  ➕",
+                        url=f"https://t.me/katil_vc_player_bot?startgroup=true",
                     )
                 ],
-                [InlineKeyboardButton("༒★[•亗『𝐊𝐀𝐓𝐈𝐋』亗•]★", url=f"https://t.me/TERA_BAAP_KATIL")],
+                [InlineKeyboardButton("༒★[•亗『𝐊𝐀𝐓𝐈𝐋』亗•]★", url=f"https://t.me/TERA_BAAP_KATIL"),
+                ],
                 [
                     InlineKeyboardButton(
-                        "❖Ƭʜᴇ︻╦╤─🅻🅾️🆅🅴🆁🆂 🅿️🅾️🅸🅽🆃─╤╦︻ヅ", url=f"https://t.me/{GROUP_SUPPORT}"
+                        "❖Ƭʜᴇ︻╦╤─🅻🅾️🆅🅴🆁🆂 🅿️🅾️🅸🅽🆃─╤╦︻ヅ", url=f"https://t.me/FULL_MASTI_CLUBS"
                     ),
                     InlineKeyboardButton(
-                        "HEART BROKEN 💔 PERSON", url=f"https://t.me/{UPDATES_CHANNEL}"
+                        "📣HEART BROKEN 💔 PERSON", url=f"https://t.me/heartbrokenperson1"
                     ),
                 ],
                 [
                     InlineKeyboardButton(
-                        "👤 Assistant", url="https://t.me/KATIL_ASSISTANT"
+                        "👤 ASSISTANT", url="https://t.me/KATIL_ASSISTANT"
                     )
                 ],
             ]
@@ -90,7 +96,8 @@ KATIL""",
 @Client.on_message(
     command(["alive", f"alive@{BOT_USERNAME}"]) & filters.group & ~filters.edited
 )
-async def alive(client: Client, message: Message):
+async def alive(c: Client, message: Message):
+    chat_id = message.chat.id
     current_time = datetime.utcnow()
     uptime_sec = (current_time - START_TIME).total_seconds()
     uptime = await _human_time_duration(int(uptime_sec))
@@ -98,17 +105,18 @@ async def alive(client: Client, message: Message):
     keyboard = InlineKeyboardMarkup(
         [
             [
-                InlineKeyboardButton("❖Ƭʜᴇ︻╦╤─🅻🅾️🆅🅴🆁🆂 🅿️🅾️🅸🅽🆃─╤╦︻ヅ", url=f"https://t.me/{GROUP_SUPPORT}"),
+                InlineKeyboardButton("❖Ƭʜᴇ︻╦╤─🅻🅾️🆅🅴🆁🆂 🅿️🅾️🅸🅽🆃─╤╦︻ヅ", url=f"https://t.me/FULL_MASTI_CLUBS"),
                 InlineKeyboardButton(
-                    "HEART BROKEN 💔 PERSON", url=f"https://t.me/{UPDATES_CHANNEL}"
+                    "HEART BROKEN 💔 PERSON", url=f"https://t.me/heartbrokenperson1"
                 ),
             ]
         ]
     )
 
-    alive = f"**Hello {message.from_user.mention()}, i'm {BOT_NAME}**\n\n🧑🏼‍💻 My Master: [{ALIVE_NAME}](https://t.me/{OWNER_NAME})\n👾 Bot Version: `v{__version__}`\n🔥 Pyrogram Version: `{pyrover}`\n🐍 Python Version: `{__python_version__}`\n✨ PyTgCalls version: `{pytover.__version__}`\n🆙 Uptime Status: `{uptime}`\n\n❤ **Thanks for Adding me here, for playing video & music on your Group's video chat**"
+    alive = f"**Hello {message.from_user.mention()}, i'm {BOT_NAME}**\n\n🧑🏼‍💻 My Master: [{ALIVE_NAME}](https://t.me/{OWNER_NAME})\n👾 Bot Version: `v{__version__}`\n🔥 Pyrogram Version: `{pyrover}`\n🐍 Python Version: `{__python_version__}`\n✨ PyTgCalls Version: `{pytover.__version__}`\n🆙 Uptime Status: `{uptime}`\n\n❤ **Thanks for Adding me here, for playing video & music on your Group's video chat**"
 
-    await message.send_photo(
+    await c.send_photo(
+        chat_id,
         photo=f"{ALIVE_IMG}",
         caption=alive,
         reply_markup=keyboard,
@@ -135,8 +143,24 @@ async def get_uptime(client: Client, message: Message):
     )
 
 
+@Client.on_chat_join_request()
+async def approve_join_chat(c: Client, m: ChatJoinRequest):
+    if not m.from_user:
+        return
+    try:
+        await c.approve_chat_join_request(m.chat.id, m.from_user.id)
+    except FloodWait as e:
+        await asyncio.sleep(e.x + 2)
+        await c.approve_chat_join_request(m.chat.id, m.from_user.id)
+
+
 @Client.on_message(filters.new_chat_members)
 async def new_chat(c: Client, m: Message):
+    chat_id = m.chat.id
+    if await is_served_chat(chat_id):
+        pass
+    else:
+        await add_served_chat(chat_id)
     ass_uname = (await user.get_me()).username
     bot_id = (await c.get_me()).id
     for member in m.new_chat_members:
@@ -152,8 +176,27 @@ async def new_chat(c: Client, m: Message):
                             InlineKeyboardButton("❖Ƭʜᴇ︻╦╤─🅻🅾️🆅🅴🆁🆂 🅿️🅾️🅸🅽🆃─╤╦︻ヅ", url=f"https://t.me/FULL_MASTI_CLUBS")
                         ],
                         [
-                            InlineKeyboardButton("👤 Assistant", url=f"https://t.me/{ass_uname}")
+                            InlineKeyboardButton("👤 ASSISTANT", url="https://t.me/KATIL_ASSISTANT")
                         ]
                     ]
                 )
             )
+
+
+chat_watcher_group = 5
+
+@Client.on_message(group=chat_watcher_group)
+async def chat_watcher_func(_, message: Message):
+    try:
+        userid = message.from_user.id
+    except Exception:
+        return
+    suspect = f"[{message.from_user.first_name}](tg://user?id={message.from_user.id})"
+    if await is_gbanned_user(userid):
+        try:
+            await message.chat.ban_member(userid)
+        except Exception:
+            return
+        await message.reply_text(
+            f"👮🏼 (> {suspect} <)\n\n**Gbanned** user detected, that user has been gbanned by sudo user and was blocked from this Chat !\n\n🚫 **Reason:** potential spammer and abuser."
+        )
