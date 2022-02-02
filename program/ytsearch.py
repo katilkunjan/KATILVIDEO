@@ -5,7 +5,7 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from youtube_search import YoutubeSearch
 
 
-@Client.on_message(command(["search", f"search@katil_vc_player_bot"]))
+@Client.on_message(command(["search", f"search{BOT_USERNAME}"]))
 async def ytsearch(_, message: Message):
     if len(message.command) < 2:
         return await message.reply_text("/search **needs an argument !**")
