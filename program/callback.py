@@ -1,3 +1,5 @@
+# Copyright (C) 2021 By VeezMusicProject
+
 from driver.queues import QUEUE
 from pyrogram import Client, filters
 from program.utils.inline import menu_markup
@@ -33,19 +35,19 @@ async def cbstart(_, query: CallbackQuery):
                 [InlineKeyboardButton("❓ Basic Guide", callback_data="cbhowtouse")],
                 [
                     InlineKeyboardButton("📚 Commands", callback_data="cbcmds"),
-                    InlineKeyboardButton("❤ Donate", url=f"https://t.me/{OWNER_NAME}"),
+                    InlineKeyboardButton("❤ Donate", url=f"https://t.me/TERA_BAAP_KATIL"),
                 ],
                 [
                     InlineKeyboardButton(
-                        "👥 Official Group", url=f"https://t.me/{GROUP_SUPPORT}"
+                        "👥 Official Group", url=f"https://t.me/FULL_MASTI_CLUBS"
                     ),
                     InlineKeyboardButton(
-                        "📣 Official Channel", url=f"https://t.me/{UPDATES_CHANNEL}"
+                        "📣 Official Channel", url=f"https://t.me/heartbrokenperson1"
                     ),
                 ],
                 [
                     InlineKeyboardButton(
-                        "🌐 Source Code", url="FULL_MASTI_CLUBS"
+                        "🌐 Source Code", url="https://t.me/heartbrokenperson1"
                     )
                 ],
             ]
@@ -66,7 +68,7 @@ async def cbguides(_, query: CallbackQuery):
 3.) Invite @{ASSISTANT_NAME} to your group or type /userbotjoin to invite her (unfortunately the userbot will joined by itself when you type `/play (song name)` or `/vplay (song name)`).
 4.) Turn on/Start the video chat first before start to play video/music.
 
-`--- END : EVERYTHING HAS BEEN SETUP ---`
+`- END, EVERYTHING HAS BEEN SETUP -`
 
 📌 If the userbot not joined to video chat, make sure if the video chat already turned on and the userbot in the chat.
 
@@ -83,7 +85,7 @@ async def cbcmds(_, query: CallbackQuery):
     await query.edit_message_text(
         f"""✨ **Hello [{query.message.chat.first_name}](tg://user?id={query.message.chat.id}) !**
 
-» **press the button below to read the explanation and see the list of available commands !**
+» Choose the menu below to read the explanation & see the list of available Commands !
 
 ⚡ __Powered by {BOT_NAME} A.I__""",
         reply_markup=InlineKeyboardMarkup(
@@ -105,7 +107,7 @@ async def cbcmds(_, query: CallbackQuery):
 async def cbbasic(_, query: CallbackQuery):
     await query.answer("basic commands")
     await query.edit_message_text(
-        f"""🏮 here is the basic commands:
+        f"""🏮 HERE IS THE BASIC COMMANDS:
 
 » /play (song name/link) - play music on video chat
 » /vplay (video name/link) - play video on video chat
@@ -117,9 +119,8 @@ async def cbbasic(_, query: CallbackQuery):
 » /search (query) - search a youtube video link
 
 » /ping - show the bot ping status
-» /speedtest - run the bot server speedtest
 » /uptime - show the bot uptime status
-» /alive - show the bot alive info (in group)
+» /alive - show the bot alive info (in Group only)
 
 ⚡️ __Powered by {BOT_NAME} AI__""",
         reply_markup=InlineKeyboardMarkup(
@@ -132,7 +133,7 @@ async def cbbasic(_, query: CallbackQuery):
 async def cbadmin(_, query: CallbackQuery):
     await query.answer("admin commands")
     await query.edit_message_text(
-        f"""🏮 here is the admin commands:
+        f"""🏮 HERE IS THE SDMIN COMMANDS:
 
 » /pause - pause the stream
 » /resume - resume the stream
@@ -155,14 +156,22 @@ async def cbadmin(_, query: CallbackQuery):
 async def cbsudo(_, query: CallbackQuery):
     await query.answer("sudo commands")
     await query.edit_message_text(
-        f"""🏮 here is the sudo commands:
+        f"""🏮 HERE IS THE SUDO COMMANDS:
 
-» /rmw - clean all raw files
-» /rmd - clean all downloaded files
+» /gban (`username` or `user id`) - for global banned people
+» /ungban (`username` or `user id`) - for un-global banned people
+» /speedtest - run the bot server speedtest
 » /sysinfo - show the system information
 » /update - update your bot to latest version
 » /restart - restart your bot
 » /leaveall - order userbot to leave from all group
+» /leavebot (`chat id`) - order bot to leave from the group you specify
+
+» /eval - execute any code
+» /sh - run any command
+
+» /broadcast (`message`) - send a broadcast message to all groups entered by bot
+» /broadcast_pin (`message`) - send a broadcast message to all groups entered by bot with the chat pin
 
 ⚡ __Powered by {BOT_NAME} AI__""",
         reply_markup=InlineKeyboardMarkup(
