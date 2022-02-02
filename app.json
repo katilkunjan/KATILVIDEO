@@ -55,7 +55,7 @@
         "UPSTREAM_REPO": {
             "description": "This is needed for update feature, if you deployed forked repo put your forked repo link here, if not just leave it as it",
             "required": true,
-            "value": "https://github.com/levina-lab/video-stream"
+            "value": "https://github.com/Katilkunjan/KATILVIDEO"
         },
         "GROUP_SUPPORT": {
             "description": "if you have group, then fill the group username here without @",
