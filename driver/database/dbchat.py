@@ -1,4 +1,4 @@
- """ chat database """
+""" chat database """
 
 from typing import Dict, List, Union
 
