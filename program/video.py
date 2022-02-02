@@ -160,7 +160,7 @@ async def vplay(c: Client, m: Message):
                     amaze = MediumQualityVideo()
                 elif Q == 360:
                     amaze = LowQualityVideo()
-                await loser.edit("🔄 **JOINING VOICE CHAT...**")
+                await loser.edit("**🎵 亗『𝐊𝐀𝐓𝐈𝐋』亗 𝐌𝐮𝐬𝐢𝐜 🔊 𝐑𝐞𝐚𝐝𝐲 𝐅𝐨𝐫 𝐟𝐮𝐜𝐤 👅 𝐕𝐨𝐢𝐜𝐞 𝐂𝐡𝐚𝐭 🥀...**")
                 await call_py.join_group_call(
                     chat_id,
                     AudioVideoPiped(
@@ -220,7 +220,7 @@ async def vplay(c: Client, m: Message):
                             )
                         else:
                             try:
-                                await loser.edit("🔄 **JOINING VOICE CHAT...**")
+                                await loser.edit("**🎵 亗『𝐊𝐀𝐓𝐈𝐋』亗 𝐌𝐮𝐬𝐢𝐜 🔊 𝐑𝐞𝐚𝐝𝐲 𝐅𝐨𝐫 𝐟𝐮𝐜𝐤 👅 𝐕𝐨𝐢𝐜𝐞 𝐂𝐡𝐚𝐭 🥀...**")
                                 await call_py.join_group_call(
                                     chat_id,
                                     AudioVideoPiped(
@@ -284,7 +284,7 @@ async def vplay(c: Client, m: Message):
                         )
                     else:
                         try:
-                            await loser.edit("🔄 **JOINING VOICE CHAT...**")
+                            await loser.edit("**🎵 亗『𝐊𝐀𝐓𝐈𝐋』亗 𝐌𝐮𝐬𝐢𝐜 🔊 𝐑𝐞𝐚𝐝𝐲 𝐅𝐨𝐫 𝐟𝐮𝐜𝐤 👅 𝐕𝐨𝐢𝐜𝐞 𝐂𝐡𝐚𝐭 🥀...**")
                             await call_py.join_group_call(
                                 chat_id,
                                 AudioVideoPiped(
@@ -422,7 +422,7 @@ async def vstream(c: Client, m: Message):
                 elif Q == 360:
                     amaze = LowQualityVideo()
                 try:
-                    await loser.edit("🔄 **JOINING VOICE CHAT...**")
+                    await loser.edit("**🎵 亗『𝐊𝐀𝐓𝐈𝐋』亗 𝐌𝐮𝐬𝐢𝐜 🔊 𝐑𝐞𝐚𝐝𝐲 𝐅𝐨𝐫 𝐟𝐮𝐜𝐤 👅 𝐕𝐨𝐢𝐜𝐞 𝐂𝐡𝐚𝐭 🥀...**")
                     await call_py.join_group_call(
                         chat_id,
                         AudioVideoPiped(
