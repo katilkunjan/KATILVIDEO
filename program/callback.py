@@ -1,5 +1,3 @@
-# Copyright (C) 2021 By VeezMusicProject
-
 from driver.queues import QUEUE
 from pyrogram import Client, filters
 from program.utils.inline import menu_markup
