@@ -1,7 +1,7 @@
 import re
 import asyncio
 
-from config import ASSISTANT_NAME, BOT_USERNAME, IMG_1, IMG_2
+from config import BOT_USERNAME, IMG_1, IMG_2
 from program.utils.inline import stream_markup
 from driver.design.thumbnail import thumb
 from driver.design.chatname import CHAT_TITLE
@@ -10,7 +10,7 @@ from driver.queues import QUEUE, add_to_queue
 from driver.veez import call_py, user
 from pyrogram import Client
 from pyrogram.errors import UserAlreadyParticipant, UserNotParticipant
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
+from pyrogram.types import InlineKeyboardMarkup, Message
 from pytgcalls import StreamType
 from pytgcalls.types.input_stream import AudioVideoPiped
 from pytgcalls.types.input_stream.quality import (
@@ -60,7 +60,9 @@ async def vplay(c: Client, m: Message):
     chat_id = m.chat.id
     user_id = m.from_user.id
     if m.sender_chat:
-        return await m.reply_text("you're an __Anonymous__ Admin !\n\n» revert back to user account from admin rights.")
+        return await m.reply_text(
+            "you're an __Anonymous__ Admin !\n\n» revert back to user account from admin rights."
+        )
     try:
         aing = await c.get_me()
     except Exception as e:
@@ -73,18 +75,21 @@ async def vplay(c: Client, m: Message):
         return
     if not a.can_manage_voice_chats:
         await m.reply_text(
-        "💡 To use me, Give me the following permission below:"
-        + "\n\n» ❌ __Manage video chat__\n\nOnce done, try again.")
+            "💡 To use me, Give me the following permission below:"
+            + "\n\n» ❌ __Manage video chat__\n\nOnce done, try again."
+        )
         return
     if not a.can_delete_messages:
         await m.reply_text(
-        "💡 To use me, Give me the following permission below:"
-        + "\n\n» ❌ __Delete messages__\n\nOnce done, try again.")
+            "💡 To use me, Give me the following permission below:"
+            + "\n\n» ❌ __Delete messages__\n\nOnce done, try again."
+        )
         return
     if not a.can_invite_users:
         await m.reply_text(
-        "💡 To use me, Give me the following permission below:"
-        + "\n\n» ❌ __Add users__\n\nOnce done, try again.")
+            "💡 To use me, Give me the following permission below:"
+            + "\n\n» ❌ __Add users__\n\nOnce done, try again."
+        )
         return
     try:
         ubot = (await user.get_me()).id
@@ -93,17 +98,17 @@ async def vplay(c: Client, m: Message):
             await c.unban_chat_member(chat_id, ubot)
             invitelink = await c.export_chat_invite_link(chat_id)
             if invitelink.startswith("https://t.me/+"):
-                    invitelink = invitelink.replace(
-                        "https://t.me/+", "https://t.me/joinchat/"
-                    )
+                invitelink = invitelink.replace(
+                    "https://t.me/+", "https://t.me/joinchat/"
+                )
             await user.join_chat(invitelink)
     except UserNotParticipant:
         try:
             invitelink = await c.export_chat_invite_link(chat_id)
             if invitelink.startswith("https://t.me/+"):
-                    invitelink = invitelink.replace(
-                        "https://t.me/+", "https://t.me/joinchat/"
-                    )
+                invitelink = invitelink.replace(
+                    "https://t.me/+", "https://t.me/joinchat/"
+                )
             await user.join_chat(invitelink)
         except UserAlreadyParticipant:
             pass
@@ -131,8 +136,10 @@ async def vplay(c: Client, m: Message):
             try:
                 if replied.video:
                     songname = replied.video.file_name[:70]
+                    duration = replied.video.duration
                 elif replied.document:
                     songname = replied.document.file_name[:70]
+                    duration = replied.document.duration
             except BaseException:
                 songname = "Video"
 
@@ -144,7 +151,7 @@ async def vplay(c: Client, m: Message):
                 await m.reply_photo(
                     photo=f"{IMG_1}",
                     reply_markup=InlineKeyboardMarkup(buttons),
-                    caption=f"💡 **Track added to queue »** `{pos}`\n\n🗂 **Name:** [{songname}]({link}) | `video`\n💭 **Chat:** `{chat_id}`\n🧸 **Request by:** {requester}",
+                    caption=f"💡 **Track added to queue »** `{pos}`\n\n🗂 **Name:** [{songname}]({link}) | `video`\n⏱️ **Duration:** `{duration}`\n🧸 **Request by:** {requester}",
                 )
             else:
                 if Q == 720:
@@ -153,7 +160,7 @@ async def vplay(c: Client, m: Message):
                     amaze = MediumQualityVideo()
                 elif Q == 360:
                     amaze = LowQualityVideo()
-                await loser.edit("🔄 **Joining vc...**")
+                await loser.edit("🔄 **JOINING VOICE CHAT...**")
                 await call_py.join_group_call(
                     chat_id,
                     AudioVideoPiped(
@@ -170,15 +177,15 @@ async def vplay(c: Client, m: Message):
                 await m.reply_photo(
                     photo=f"{IMG_2}",
                     reply_markup=InlineKeyboardMarkup(buttons),
-                    caption=f"🗂 **Name:** [{songname}]({link}) | `video`\n💭 **Chat:** `{chat_id}`\n🧸 **Request by:** {requester}",
+                    caption=f"🗂 **Name:** [{songname}]({link}) | `video`\n⏱️ **Duration:** `{duration}`\n🧸 **Request by:** {requester}",
                 )
         else:
             if len(m.command) < 2:
                 await m.reply(
-                    "**ARE YAAR KUSH TO VIDEO NAME YA LINK SEND KRO SIRF CMND LIKH DIYE.HD HAI YAAR DIMAG LGAYA KRO THODA.**"
+                    "» REPLY TO AN **VIDEO FILE** OR **GIVE SOMETHING TO SEARCH.**"
                 )
             else:
-                loser = await c.send_message(chat_id, "🔍 **DHUNDH RHA HU SABR KRO THORA**")
+                loser = await c.send_message(chat_id, "🔍 **DHUNDH RHA HU SABR KRO THORA...**")
                 query = m.text.split(None, 1)[1]
                 search = ytsearch(query)
                 Q = 720
@@ -213,7 +220,7 @@ async def vplay(c: Client, m: Message):
                             )
                         else:
                             try:
-                                await loser.edit("🔄 **Joining vc...**")
+                                await loser.edit("🔄 **JOINING VOICE CHAT...**")
                                 await call_py.join_group_call(
                                     chat_id,
                                     AudioVideoPiped(
@@ -239,10 +246,10 @@ async def vplay(c: Client, m: Message):
     else:
         if len(m.command) < 2:
             await m.reply(
-                "ARE YAAR KUSH TO VIDEO NAME YA LINK SEND KRO SIRF CMND LIKH DIYE.HD HAI YAAR DIMAG LGAYA KRO THODA.**"
+                "» REPLY TO AN **VIDEO FILE** OR **GIVE SOMETHING TO SEARCH.**"
             )
         else:
-            loser = await c.send_message(chat_id, "🔍 **DHUNDH RHA HU SABR KRO THORA**")
+            loser = await c.send_message(chat_id, "🔍 **DHUNDH RHA HU SABR RKHO THODA...**")
             query = m.text.split(None, 1)[1]
             search = ytsearch(query)
             Q = 720
@@ -266,7 +273,9 @@ async def vplay(c: Client, m: Message):
                     if chat_id in QUEUE:
                         pos = add_to_queue(chat_id, songname, ytlink, url, "Video", Q)
                         await loser.delete()
-                        requester = f"[{m.from_user.first_name}](tg://user?id={m.from_user.id})"
+                        requester = (
+                            f"[{m.from_user.first_name}](tg://user?id={m.from_user.id})"
+                        )
                         buttons = stream_markup(user_id)
                         await m.reply_photo(
                             photo=image,
@@ -275,7 +284,7 @@ async def vplay(c: Client, m: Message):
                         )
                     else:
                         try:
-                            await loser.edit("🔄 **Joining vc...**")
+                            await loser.edit("🔄 **JOINING VOICE CHAT...**")
                             await call_py.join_group_call(
                                 chat_id,
                                 AudioVideoPiped(
@@ -292,7 +301,7 @@ async def vplay(c: Client, m: Message):
                             await m.reply_photo(
                                 photo=image,
                                 reply_markup=InlineKeyboardMarkup(buttons),
-                                caption=f"🗂 **Name:** [{songname}]({url}) |`video`\n⏱ **Duration:** `{duration}`\n🧸 **Request by:** {requester}",
+                                caption=f"🗂 **Name:** [{songname}]({url}) | `video`\n⏱ **Duration:** `{duration}`\n🧸 **Request by:** {requester}",
                             )
                         except Exception as ep:
                             await loser.delete()
@@ -305,7 +314,9 @@ async def vstream(c: Client, m: Message):
     chat_id = m.chat.id
     user_id = m.from_user.id
     if m.sender_chat:
-        return await m.reply_text("you're an __Anonymous__ Admin !\n\n» revert back to user account from admin rights.")
+        return await m.reply_text(
+            "you're an __Anonymous__ Admin !\n\n» revert back to user account from admin rights."
+        )
     try:
         aing = await c.get_me()
     except Exception as e:
@@ -318,37 +329,40 @@ async def vstream(c: Client, m: Message):
         return
     if not a.can_manage_voice_chats:
         await m.reply_text(
-        "💡 To use me, Give me the following permission below:"
-        + "\n\n» ❌ __Manage video chat__\n\nOnce done, try again.")
+            "💡 To use me, Give me the following permission below:"
+            + "\n\n» ❌ __Manage video chat__\n\nOnce done, try again."
+        )
         return
     if not a.can_delete_messages:
         await m.reply_text(
-        "💡 To use me, Give me the following permission below:"
-        + "\n\n» ❌ __Delete messages__\n\nOnce done, try again.")
+            "💡 To use me, Give me the following permission below:"
+            + "\n\n» ❌ __Delete messages__\n\nOnce done, try again."
+        )
         return
     if not a.can_invite_users:
         await m.reply_text(
-        "💡 To use me, Give me the following permission below:"
-        + "\n\n» ❌ __Add users__\n\nOnce done, try again.")
+            "💡 To use me, Give me the following permission below:"
+            + "\n\n» ❌ __Add users__\n\nOnce done, try again."
+        )
         return
     try:
         ubot = (await user.get_me()).id
-        b = await c.get_chat_member(chat_id, ubot) 
+        b = await c.get_chat_member(chat_id, ubot)
         if b.status == "kicked":
             await c.unban_chat_member(chat_id, ubot)
             invitelink = await c.export_chat_invite_link(chat_id)
             if invitelink.startswith("https://t.me/+"):
-                    invitelink = invitelink.replace(
-                        "https://t.me/+", "https://t.me/joinchat/"
-                    )
+                invitelink = invitelink.replace(
+                    "https://t.me/+", "https://t.me/joinchat/"
+                )
             await user.join_chat(invitelink)
     except UserNotParticipant:
         try:
             invitelink = await c.export_chat_invite_link(chat_id)
             if invitelink.startswith("https://t.me/+"):
-                    invitelink = invitelink.replace(
-                        "https://t.me/+", "https://t.me/joinchat/"
-                    )
+                invitelink = invitelink.replace(
+                    "https://t.me/+", "https://t.me/joinchat/"
+                )
             await user.join_chat(invitelink)
         except UserAlreadyParticipant:
             pass
@@ -363,7 +377,7 @@ async def vstream(c: Client, m: Message):
         if len(m.command) == 2:
             link = m.text.split(None, 1)[1]
             Q = 720
-            loser = await c.send_message(chat_id, "🔄 **processing stream...**")
+            loser = await c.send_message(chat_id, "🔄 **PROCESSING STREAM...**")
         elif len(m.command) == 3:
             op = m.text.split(None, 1)[1]
             link = op.split(None, 1)[0]
@@ -373,9 +387,9 @@ async def vstream(c: Client, m: Message):
             else:
                 Q = 720
                 await m.reply(
-                    "» __only 720, 480, 360 allowed__ \n💡 **now streaming video in 720p**"
+                    "» __only 720, 480, 360 allowed__ \n💡 **NOW STREAMING VIDEO IN 720p**"
                 )
-            loser = await c.send_message(chat_id, "🔄 **processing stream...**")
+            loser = await c.send_message(chat_id, "🔄 **PROCESSING STREAM...**")
         else:
             await m.reply("**/vstream {link} {720/480/360}**")
 
@@ -408,7 +422,7 @@ async def vstream(c: Client, m: Message):
                 elif Q == 360:
                     amaze = LowQualityVideo()
                 try:
-                    await loser.edit("🔄 **Joining vc...**")
+                    await loser.edit("🔄 **JOINING VOICE CHAT...**")
                     await call_py.join_group_call(
                         chat_id,
                         AudioVideoPiped(
@@ -420,7 +434,9 @@ async def vstream(c: Client, m: Message):
                     )
                     add_to_queue(chat_id, "Live Stream", livelink, link, "Video", Q)
                     await loser.delete()
-                    requester = f"[{m.from_user.first_name}](tg://user?id={m.from_user.id})"
+                    requester = (
+                        f"[{m.from_user.first_name}](tg://user?id={m.from_user.id})"
+                    )
                     buttons = stream_markup(user_id)
                     await m.reply_photo(
                         photo=f"{IMG_2}",
