@@ -182,10 +182,10 @@ async def vplay(c: Client, m: Message):
         else:
             if len(m.command) < 2:
                 await m.reply(
-                    "» REPLY TO AN **VIDEO FILE** OR **GIVE SOMETHING TO SEARCH.**"
+                    "»✌️𝐖𝐡𝐚𝐭'𝐒 𝐓𝐡𝐞 ❤️ 𝐒𝐨𝐧𝐠 🎸 𝐘𝐨𝐮 🎧 𝐖𝐚𝐧𝐭 𝐓𝐨 𝐏𝐥𝐚𝐲 ▶️ ❤️**"
                 )
             else:
-                loser = await c.send_message(chat_id, "🔍 **DHUNDH RHA HU SABR KRO THORA...**")
+                loser = await c.send_message(chat_id, "🔎 **𝐅𝐢𝐧𝐝𝐢𝐧𝐠 💫 𝐓𝐡𝐞 𝐒𝐨𝐧𝐠 ❤️ ❰ 亗『𝐊𝐀𝐓𝐈𝐋』亗 MUSIC ❱...**")
                 query = m.text.split(None, 1)[1]
                 search = ytsearch(query)
                 Q = 720
@@ -246,10 +246,10 @@ async def vplay(c: Client, m: Message):
     else:
         if len(m.command) < 2:
             await m.reply(
-                "» REPLY TO AN **VIDEO FILE** OR **GIVE SOMETHING TO SEARCH.**"
+                "✌️𝐖𝐡𝐚𝐭'𝐒 𝐓𝐡𝐞 ❤️ 𝐒𝐨𝐧𝐠 🎸 𝐘𝐨𝐮 🎧 𝐖𝐚𝐧𝐭 𝐓𝐨 𝐏𝐥𝐚𝐲 ▶️ ❤️**"
             )
         else:
-            loser = await c.send_message(chat_id, "🔍 **DHUNDH RHA HU SABR RKHO THODA...**")
+            loser = await c.send_message(chat_id, "🔎 **𝐅𝐢𝐧𝐝𝐢𝐧𝐠 💫 𝐓𝐡𝐞 𝐒𝐨𝐧𝐠 ❤️ ❰ 亗『𝐊𝐀𝐓𝐈𝐋』亗 MUSIC ❱...****")
             query = m.text.split(None, 1)[1]
             search = ytsearch(query)
             Q = 720
