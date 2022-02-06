@@ -60,9 +60,9 @@ async def start_(client: Client, message: Message):
         f"""✨ **Welcome {message.from_user.mention()} !**\n
 💭 [❰ 亗『𝐊𝐀𝐓𝐈𝐋』亗 MUSIC ❱](https://t.me/katil_vc_player_bot) **Allows you to play music and video on groups through the Telegram Group video chat!**
 
-💡 **Find out all the Bot's commands and how they work by clicking on the » 📚 Commands button!**
 
-🔖 **To know how to use this bot, please click on the » ❓ Basic Guide button!**
+
+
 """,
         reply_markup=InlineKeyboardMarkup(
             [
