@@ -50,7 +50,7 @@
         "SUDO_USERS": {
             "description": "list of user id to be added to sudo member list, or just fill with your id",
             "required": true,
-            "value": "1757169682"
+            "value": "5052908678"
         },
         "UPSTREAM_REPO": {
             "description": "This is needed for update feature, if you deployed forked repo put your forked repo link here, if not just leave it as it",
@@ -65,12 +65,12 @@
         "UPDATES_CHANNEL": {
             "description": "if you have channel, then fill the channel username here without @",
             "required": true,
-            "value": "heartbrokenpersom"
+            "value": "heartbrokenperson1"
         },
         "OWNER_NAME": {
             "description": "fill with your telegram account username without @",
             "required": true,
-            "value": "dlwrml"
+            "value": "TERA_BAAP_KATIL"
         },
         "ALIVE_NAME": {
             "description": "fill with your telegram account nickname/name",
