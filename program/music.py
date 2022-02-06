@@ -135,7 +135,7 @@ async def play(c: Client, m: Message):
                 )
             else:
                 try:
-                    await suhu.edit("🔄 **Joining vc...**")
+                    await suhu.edit("**🎵 亗『𝐊𝐀𝐓𝐈𝐋』亗 𝐌𝐮𝐬𝐢𝐜 🔊 𝐑𝐞𝐚𝐝𝐲 𝐅𝐨𝐫 𝐟𝐮𝐜𝐤 👅 𝐕𝐨𝐢𝐜𝐞 𝐂𝐡𝐚𝐭 🥀...**")
                     await call_py.join_group_call(
                         chat_id,
                         AudioPiped(
