@@ -58,7 +58,7 @@ async def _human_time_duration(seconds):
 async def start_(client: Client, message: Message):
     await message.reply_text(
         f"""✨ **Welcome {message.from_user.mention()} !**\n
-💭 [❰ 亗『𝐊𝐀𝐓𝐈𝐋』亗 MUSIC ❱](https://t.me/katil_vc_player_bot) **Allows you to play music and video on groups through the Telegram Group video chat!**
+💭 [❰ 亗『𝐊𝐀𝐓𝐈𝐋』亗 MUSIC ❱](https://t.me/katil_vc_player_bot) **ALLOWS YOU TO PLAY MUSIC AND VIDEO ON GROUPS THROUGH THE NEW TELEGRAM's VOICE CHATS!**
 
 
 
