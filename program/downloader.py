@@ -1,187 +1,190 @@
-from __future__ import unicode_literals
-
-import os
 import re
-import math
-import time
-import asyncio
-import lyricsgenius
-from random import randint
-from urllib.parse import urlparse
+import sys
+import shutil
+import subprocess
+import traceback
 
-import aiofiles
-import aiohttp
-import requests
-import wget
-import yt_dlp
+from time import time
+from io import StringIO
+from sys import version as pyver
+from inspect import getfullargspec
+
+from config import BOT_USERNAME as bname
+from driver.core import bot
+from driver.filters import command
 from pyrogram import Client, filters
-from pyrogram.errors import FloodWait, MessageNotModified
-from pyrogram.types import Message
-from youtube_search import YoutubeSearch
-from youtubesearchpython import VideosSearch
-from yt_dlp import YoutubeDL
-
-from config import BOT_USERNAME as bn
-from driver.decorators import humanbytes
-from driver.filters import command, other_filters
+from driver.database.dbchat import remove_served_chat
+from driver.decorators import bot_creator, sudo_users_only, errors
+from driver.utils import remove_if_exists
+from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
 
 
-ydl_opts = {
-    'format': 'best',
-    'keepvideo': True,
-    'prefer_ffmpeg': False,
-    'geo_bypass': True,
-    'outtmpl': '%(title)s.%(ext)s',
-    'quite': True
-}
-
-is_downloading = False
-
-
-@Client.on_message(command(["song", f"song@{bn}"]) & ~filters.edited)
-def song(_, message):
-    global is_downloading
-    query = " ".join(message.command[1:])
-    if is_downloading:
-        message.reply(
-            "» Other download is in progress, please try again after some time !"
-        )
-        return
-    is_downloading = True
-    m = message.reply("🔎 finding song...")
-    ydl_ops = {"format": "bestaudio[ext=m4a]"}
-    try:
-        results = YoutubeSearch(query, max_results=1).to_dict()
-        link = f"https://youtube.com{results[0]['url_suffix']}"
-        title = results[0]["title"][:40]
-        thumbnail = results[0]["thumbnails"][0]
-        thumb_name = f"{title}.jpg"
-        thumb = requests.get(thumbnail, allow_redirects=True)
-        open(thumb_name, "wb").write(thumb.content)
-        duration = results[0]["duration"]
-
-    except Exception as e:
-        m.edit("❌ song not found.\n\nplease give a valid song name !")
-        print(str(e))
-        return
-    m.edit("📥 downloading song...")
-    try:
-        with yt_dlp.YoutubeDL(ydl_ops) as ydl:
-            info_dict = ydl.extract_info(link, download=False)
-            audio_file = ydl.prepare_filename(info_dict)
-            ydl.process_info(info_dict)
-        rep = f"• uploader @{bn}"
-        host = str(info_dict["uploader"])
-        secmul, dur, dur_arr = 1, 0, duration.split(":")
-        for i in range(len(dur_arr) - 1, -1, -1):
-            dur += int(float(dur_arr[i])) * secmul
-            secmul *= 60
-        m.edit("📤 uploading song...")
-        message.reply_audio(
-            audio_file,
-            caption=rep,
-            performer=host,
-            thumb=thumb_name,
-            parse_mode="md",
-            title=title,
-            duration=dur,
-        )
-        m.delete()
-        is_downloading = False
-    except Exception as e:
-        m.edit("❌ error, wait for bot owner to fix")
-        print(e)
-
-    try:
-        os.remove(audio_file)
-        os.remove(thumb_name)
-    except Exception as e:
-        print(e)
-
-
-@Client.on_message(
-    command(["vsong", f"vsong@{bn}", "video", f"video@{bn}"]) & ~filters.edited
-)
-async def vsong(client, message):
-    global is_downloading
-    ydl_opts = {
-        "format": "best",
-        "keepvideo": True,
-        "prefer_ffmpeg": False,
-        "geo_bypass": True,
-        "outtmpl": "%(title)s.%(ext)s",
-        "quite": True,
-    }
-    query = " ".join(message.command[1:])
-    if is_downloading:
-        return await message.reply(
-            "» Other download is in progress, please try again after some time !"
-        )
-    is_downloading = True
-    try:
-        results = YoutubeSearch(query, max_results=1).to_dict()
-        link = f"https://youtube.com{results[0]['url_suffix']}"
-        title = results[0]["title"][:40]
-        thumbnail = results[0]["thumbnails"][0]
-        thumb_name = f"{title}.jpg"
-        thumb = requests.get(thumbnail, allow_redirects=True)
-        open(thumb_name, "wb").write(thumb.content)
-        results[0]["duration"]
-        results[0]["url_suffix"]
-        results[0]["views"]
-        message.from_user.mention
-    except Exception as e:
-        print(e)
-    try:
-        msg = await message.reply("📥 downloading video...")
-        with YoutubeDL(ydl_opts) as ytdl:
-            ytdl_data = ytdl.extract_info(link, download=True)
-            file_name = ytdl.prepare_filename(ytdl_data)
-    except Exception as e:
-        return await msg.edit(f"🚫 error: `{e}`")
-    preview = wget.download(thumbnail)
-    await msg.edit("📤 uploading video...")
-    await message.reply_video(
-        file_name,
-        duration=int(ytdl_data["duration"]),
-        thumb=preview,
-        caption=ytdl_data["title"],
+async def aexec(code, client, message):
+    exec(
+        "async def __aexec(client, message): "
+        + "".join(f"\n {a}" for a in code.split("\n"))
     )
-    is_downloading = False
-    try:
-        os.remove(file_name)
-        await msg.delete()
-    except Exception as e:
-        print(e)
+    return await locals()["__aexec"](client, message)
+
+async def edit_or_reply(msg: Message, **kwargs):
+    func = msg.edit_text if msg.from_user.is_self else msg.reply
+    spec = getfullargspec(func.__wrapped__).args
+    await func(**{k: v for k, v in kwargs.items() if k in spec})
 
 
-@Client.on_message(command(["lyric", f"lyric@{bn}", "lyrics"]))
-async def get_lyric_genius(_, message: Message):
+@Client.on_message(command(["eval", f"eval{bname}"]) & ~filters.edited)
+@sudo_users_only
+async def executor(client, message):
     if len(message.command) < 2:
-        return await message.reply_text("**usage:**\n\n/lyrics (song name)")
-    m = await message.reply_text("🔍 Searching lyrics...")
-    query = message.text.split(None, 1)[1]
-    x = "OXaVabSRKQLqwpiYOn-E4Y7k3wj-TNdL5RfDPXlnXhCErbcqVvdCF-WnMR5TBctI"
-    y = lyricsgenius.Genius(x)
-    y.verbose = False
-    S = y.search_song(query, get_full_info=False)
-    if S is None:
-        return await m.edit("❌ `404` lyrics not found")
-    xxx = f"""
-**Song Name:** __{query}__
-**Artist Name:** {S.artist}
-**__Lyrics:__**
-{S.lyrics}"""
-    if len(xxx) > 4096:
-        await m.delete()
-        filename = "lyrics.txt"
+        return await edit_or_reply(message, text="» Give a command to execute")
+    try:
+        cmd = message.text.split(" ", maxsplit=1)[1]
+    except IndexError:
+        return await message.delete()
+    t1 = time()
+    old_stderr = sys.stderr
+    old_stdout = sys.stdout
+    redirected_output = sys.stdout = StringIO()
+    redirected_error = sys.stderr = StringIO()
+    stdout, stderr, exc = None, None, None
+    try:
+        await aexec(cmd, client, message)
+    except Exception:
+        exc = traceback.format_exc()
+    stdout = redirected_output.getvalue()
+    stderr = redirected_error.getvalue()
+    sys.stdout = old_stdout
+    sys.stderr = old_stderr
+    evaluation = ""
+    if exc:
+        evaluation = exc
+    elif stderr:
+        evaluation = stderr
+    elif stdout:
+        evaluation = stdout
+    else:
+        evaluation = "SUCCESS"
+    final_output = f"`OUTPUT:`\n\n```{evaluation.strip()}```"
+    if len(final_output) > 4096:
+        filename = "output.txt"
         with open(filename, "w+", encoding="utf8") as out_file:
-            out_file.write(str(xxx.strip()))
+            out_file.write(str(evaluation.strip()))
+        t2 = time()
+        keyboard = InlineKeyboardMarkup(
+            [
+                [
+                    InlineKeyboardButton(
+                        text="⏳", callback_data=f"runtime {t2-t1} seconds"
+                    )
+                ]
+            ]
+        )
         await message.reply_document(
             document=filename,
-            caption=f"**OUTPUT:**\n\n`Lyrics Text`",
+            caption=f"`INPUT:`\n`{cmd[0:980]}`\n\n`OUTPUT:`\n`attached document`",
             quote=False,
+            reply_markup=keyboard,
         )
-        os.remove(filename)
+        await message.delete()
+        remove_if_exists(filename)
     else:
-        await m.edit(xxx)
+        t2 = time()
+        keyboard = InlineKeyboardMarkup(
+            [
+                [
+                    InlineKeyboardButton(
+                        text="⏳",
+                        callback_data=f"runtime {round(t2-t1, 3)} seconds",
+                    )
+                ]
+            ]
+        )
+        await edit_or_reply(message, text=final_output, reply_markup=keyboard)
+
+
+@Client.on_callback_query(filters.regex(r"runtime"))
+async def runtime_func_cq(_, cq):
+    runtime = cq.data.split(None, 1)[1]
+    await cq.answer(runtime, show_alert=True)
+
+
+@Client.on_message(command(["sh", f"sh{bname}"]) & ~filters.edited)
+@sudo_users_only
+async def shellrunner(client, message):
+    if len(message.command) < 2:
+        return await edit_or_reply(message, text="**usage:**\n\n» /sh echo hello world")
+    text = message.text.split(None, 1)[1]
+    if "\n" in text:
+        code = text.split("\n")
+        output = ""
+        for x in code:
+            shell = re.split(""" (?=(?:[^'"]|'[^']*'|"[^"]*")*$)""", x)
+            try:
+                process = subprocess.Popen(
+                    shell,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                )
+            except Exception as err:
+                print(err)
+                await edit_or_reply(message, text=f"`ERROR:`\n\n```{err}```")
+            output += f"**{code}**\n"
+            output += process.stdout.read()[:-1].decode("utf-8")
+            output += "\n"
+    else:
+        shell = re.split(""" (?=(?:[^'"]|'[^']*'|"[^"]*")*$)""", text)
+        for a in range(len(shell)):
+            shell[a] = shell[a].replace('"', "")
+        try:
+            process = subprocess.Popen(
+                shell,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+        except Exception as err:
+            print(err)
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            errors = traceback.format_exception(
+                etype=exc_type,
+                value=exc_obj,
+                tb=exc_tb,
+            )
+            return await edit_or_reply(
+                message, text=f"`ERROR:`\n\n```{''.join(errors)}```"
+            )
+        output = process.stdout.read()[:-1].decode("utf-8")
+    if str(output) == "\n":
+        output = None
+    if output:
+        if len(output) > 4096:
+            with open("output.txt", "w+") as file:
+                file.write(output)
+            await bot.send_document(
+                message.chat.id,
+                "output.txt",
+                reply_to_message_id=message.message_id,
+                caption="`OUTPUT`",
+            )
+            return remove_if_exists("output.txt")
+        await edit_or_reply(message, text=f"`OUTPUT:`\n\n```{output}```")
+    else:
+        await edit_or_reply(message, text="`OUTPUT:`\n\n`no output`")
+
+
+@Client.on_message(command(["leavebot", f"leavebot{bname}"]) & ~filters.edited)
+@bot_creator
+async def bot_leave_group(_, message):
+    if len(message.command) != 2:
+        await message.reply_text(
+            "**usage:**\n\n» /leavebot [chat id]"
+        )
+        return
+    chat = message.text.split(None, 2)[1]
+    try:
+        await bot.leave_chat(chat)
+        await remove_served_chat(chat)
+    except Exception as e:
+        await message.reply_text(f"❌ procces failed\n\nreason: `{e}`")
+        print(e)
+        return
+    await message.reply_text(f"✅ Bot successfully left from the Group:\n\n💭 » `{chat}`")
