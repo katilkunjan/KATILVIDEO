@@ -34,7 +34,7 @@ async def start_set(_, query: CallbackQuery):
                 [
                     InlineKeyboardButton(
                         "➕ APNE GROUP ME ADD KRE  ➕",
-                        url=f"https://t.me/katil_vc_player_bot?startgroup=true",,
+                        url=f"https://t.me/katil_vc_player_bot?startgroup=true",
                     )
                 ],
                 [InlineKeyboardButton("❓ Basic Guide", callback_data="user_guide")],
